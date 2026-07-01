@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقارنة أنظمة التشغيل - OS Benchmarks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><span class="icon">🖥️</span> مقارنة أنظمة التشغيل</h1>
+                <p>أداة شاملة ودينامية لقياس وتقييم أداء أنظمة التشغيل</p>
+            </div>
+        </header>
+
+        <!-- System Info Card -->
+        <div class="card system-info-card">
+            <h2>معلومات النظام 📊</h2>
+            <div id="system-info" class="system-info-grid">
+                <div class="info-item">
+                    <span class="label">نظام التشغيل:</span>
+                    <span id="os-name" class="value">جاري التحميل...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">المعالج:</span>
+                    <span id="processor" class="value">جاري التحميل...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">البنية:</span>
+                    <span id="architecture" class="value">جاري التحميل...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">إصدار Python:</span>
+                    <span id="python-version" class="value">جاري التحميل...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">المنصة:</span>
+                    <span id="platform" class="value">جاري التحميل...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">الوقت:</span>
+                    <span id="timestamp" class="value">جاري التحميل...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="card control-panel">
+            <h2>لوحة التحكم ⚙️</h2>
+            <div class="controls">
+                <button id="start-btn" class="btn btn-primary" onclick="startBenchmarks()">
+                    <span class="icon">▶️</span> بدء الاختبارات
+                </button>
+                <button id="export-btn" class="btn btn-secondary" onclick="exportResults()" disabled>
+                    <span class="icon">📥</span> تحميل النتائج
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="card" id="progress-section" style="display:none;">
+            <h2>حالة الاختبارات 📈</h2>
+            <div class="progress-info">
+                <p id="current-test">جاري التحميل...</p>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <p id="progress-percent">0%</p>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="card" id="results-section" style="display:none;">
+            <h2>نتائج الاختبارات 🎯</h2>
+            
+            <!-- CPU & Memory Results -->
+            <div class="results-category">
+                <h3>🧠 المعالج والذاكرة</h3>
+                <div id="memory-results" class="metrics-grid">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Process Management Results -->
+            <div class="results-category">
+                <h3>⚙️ إدارة العمليات</h3>
+                <div id="process-results" class="metrics-grid">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Filesystem Results -->
+            <div class="results-category">
+                <h3>📁 نظام الملفات</h3>
+                <div id="filesystem-results" class="metrics-grid">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Security Results -->
+            <div class="results-category">
+                <h3>🔒 الأمان والتشفير</h3>
+                <div id="security-results" class="metrics-grid">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>⚡ أداء عالي</h3>
+                <p>قياسات دقيقة وسريعة لجميع جوانب أداء النظام</p>
+            </div>
+            <div class="feature-card">
+                <h3>📊 تقارير ديناميكية</h3>
+                <p>تقارير فورية قابلة للتحديث والتصدير</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔒 آمن وموثوق</h3>
+                <p>فحوصات أمان شاملة وقياسات التشفير</p>
+            </div>
+            <div class="feature-card">
+                <h3>🌐 متعدد المنصات</h3>
+                <p>يعمل على Windows و Linux و macOS</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🌟 OS Comparison Benchmarks | Dynamic Performance Analysis Tool</p>
+            <p>صنع بـ ❤️ لمقارنة أداء أنظمة التشغيل</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
