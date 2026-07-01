@@ -1,60 +1,431 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OS Comparison Benchmarks</title>
+    <title>مقارنة أنظمة التشغيل - Benchmarks</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        h1 {
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
-            border-bottom: 3px solid #0366d6;
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid #667eea;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .components-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .components-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #764ba2;
             padding-bottom: 10px;
         }
-        .section {
-            margin: 20px 0;
+
+        .component {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-right: 4px solid #667eea;
         }
-        .section h2 {
-            color: #0366d6;
+
+        .component h4 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .component ul {
+            list-style: none;
+            padding-right: 20px;
+        }
+
+        .component li {
+            padding: 8px 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .component li:before {
+            content: "✓";
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .metric-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-box h5 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .tech-stack {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .tech-stack h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #764ba2;
+            padding-bottom: 10px;
+        }
+
+        .tech-item {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 20px;
+            font-size: 0.95em;
+        }
+
+        .cta-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cta-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            margin: 10px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: #666;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon {
+            font-size: 1.3em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🖥️ OS Comparison Benchmarks</h1>
-        
-        <div class="section">
-            <h2>مرحبا بك</h2>
-            <p>هذا المشروع يقوم بمقارنة أداء أنظمة التشغيل المختلفة من خلال اختبارات الأداء.</p>
+        <!-- Header -->
+        <header>
+            <h1><span class="icon">🖥️</span> مقارنة أنظمة التشغيل - Benchmarks</h1>
+            <p>أداة شاملة لقياس وتقييم أداء أنظمة التشغيل المختلفة</p>
+        </header>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3><span class="icon">⚡</span> أداء عالي</h3>
+                <p>قياسات دقيقة وسريعة لجميع جوانب أداء النظام مع نتائج فورية</p>
+            </div>
+            <div class="feature-card">
+                <h3><span class="icon">📊</span> تقارير شاملة</h3>
+                <p>تقارير مفصلة بصيغة HTML و JSON قابلة للمقارنة والتحليل</p>
+            </div>
+            <div class="feature-card">
+                <h3><span class="icon">🔒</span> آمن</h3>
+                <p>فحوصات أمان شاملة وقياسات التشفير وإدارة الأذونات</p>
+            </div>
+            <div class="feature-card">
+                <h3><span class="icon">🌐</span> متعدد المنصات</h3>
+                <p>يعمل على Windows و Linux و macOS بنفس الكفاءة</p>
+            </div>
+            <div class="feature-card">
+                <h3><span class="icon">📈</span> تحليل بيانات</h3>
+                <p>تحليل متقدم للبيانات وتوليد رسوم بيانية توضيحية</p>
+            </div>
+            <div class="feature-card">
+                <h3><span class="icon">⚙️</span> قابل للتخصيص</h3>
+                <p>إعدادات مرنة لتناسب احتياجاتك المحددة</p>
+            </div>
         </div>
 
-        <div class="section">
-            <h2>Features</h2>
-            <ul>
-                <li>CPU & Memory Benchmarking</li>
-                <li>Filesystem Performance Analysis</li>
-                <li>Process Management Tests</li>
-                <li>Security Performance Metrics</li>
-            </ul>
+        <!-- Components Section -->
+        <div class="components-section">
+            <h2>📦 مكونات المشروع الرئيسية</h2>
+
+            <div class="component">
+                <h4><span class="icon">🧠</span> cpu_memory.py - قياسات المعالج والذاكرة</h4>
+                <ul>
+                    <li>قياس سرعة تخصيص الذاكرة</li>
+                    <li>قياس سرعة الوصول للذاكرة (متسلسل وعشوائي)</li>
+                    <li>اختبار أداء CPU في العمليات الحسابية</li>
+                    <li>مراقبة استخدام الذاكرة على المدى الطويل</li>
+                </ul>
+            </div>
+
+            <div class="component">
+                <h4><span class="icon">⚙️</span> process_management.py - إدارة العمليات</h4>
+                <ul>
+                    <li>قياس سرعة إنشاء العمليات</li>
+                    <li>قياس تبديل السياق (Context Switching)</li>
+                    <li>اختبار إنشاء الخيوط (Threading)</li>
+                    <li>تقييم كفاءة إدارة العمليات</li>
+                </ul>
+            </div>
+
+            <div class="component">
+                <h4><span class="icon">📁</span> filesystem.py - نظام الملفات</h4>
+                <ul>
+                    <li>قياس سرعة إنشاء الملفات</li>
+                    <li>قياس سرعة قراءة الملفات</li>
+                    <li>قياس سرعة كتابة الملفات والإنتاجية</li>
+                    <li>اختبار عمليات المجلدات والديريكتوريات</li>
+                </ul>
+            </div>
+
+            <div class="component">
+                <h4><span class="icon">🔒</span> security.py - الأمان والتشفير</h4>
+                <ul>
+                    <li>قياس سرعة عمليات Hashing (MD5, SHA256, SHA512)</li>
+                    <li>محاكاة عمليات التشفير</li>
+                    <li>فحص ميزات الأمان (ASLR)</li>
+                    <li>التحقق من أذونات الملفات</li>
+                </ul>
+            </div>
+
+            <div class="component">
+                <h4><span class="icon">⚙️</span> config.py - الإعدادات</h4>
+                <ul>
+                    <li>معلومات النظام التلقائية</li>
+                    <li>إعدادات Benchmark قابلة للتخصيص</li>
+                    <li>معايير الأداء</li>
+                    <li>إدارة المجلدات والملفات</li>
+                </ul>
+            </div>
+
+            <div class="component">
+                <h4><span class="icon">📊</span> data_analyzer.py - تحليل البيانات</h4>
+                <ul>
+                    <li>توليد تقارير HTML شاملة</li>
+                    <li>تنسيق النتائج بصيغة JSON</li>
+                    <li>عرض معلومات النظام</li>
+                    <li>تحليل النتائج ومقارنتها</li>
+                </ul>
+            </div>
+
+            <div class="component">
+                <h4><span class="icon">📝</span> logger.py - تسجيل السجلات</h4>
+                <ul>
+                    <li>تسجيل شامل للعمليات</li>
+                    <li>تتبع الأخطاء والتحذيرات</li>
+                    <li>حفظ السجلات للمراجعة</li>
+                </ul>
+            </div>
+
+            <div class="component">
+                <h4><span class="icon">🚀</span> main.py - البرنامج الرئيسي</h4>
+                <ul>
+                    <li>تنسيق تشغيل جميع الاختبارات</li>
+                    <li>إدارة تدفق العمل</li>
+                    <li>حفظ النتائج وتوليد التقارير</li>
+                    <li>عرض رسائل التقدم والحالة</li>
+                </ul>
+            </div>
         </div>
 
-        <div class="section">
-            <h2>GitHub Repository</h2>
-            <p><a href="https://github.com/aaedmoslim70-jpg/os-comparison-benchmarks">View on GitHub</a></p>
+        <!-- Performance Metrics -->
+        <div class="components-section">
+            <h2>📈 معايير الأداء المقاسة</h2>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <h5>CPU Performance</h5>
+                    <div class="metric-value">1M+ ops/sec</div>
+                </div>
+                <div class="metric-box">
+                    <h5>Memory Bandwidth</h5>
+                    <div class="metric-value">GB/sec</div>
+                </div>
+                <div class="metric-box">
+                    <h5>Filesystem I/O</h5>
+                    <div class="metric-value">MB/sec</div>
+                </div>
+                <div class="metric-box">
+                    <h5>Process Creation</h5>
+                    <div class="metric-value">ms/process</div>
+                </div>
+                <div class="metric-box">
+                    <h5>Encryption Speed</h5>
+                    <div class="metric-value">ops/sec</div>
+                </div>
+                <div class="metric-box">
+                    <h5>Context Switches</h5>
+                    <div class="metric-value">switches/sec</div>
+                </div>
+            </div>
         </div>
+
+        <!-- Tech Stack -->
+        <div class="tech-stack">
+            <h2>🛠️ تقنيات المشروع</h2>
+            <div>
+                <span class="tech-item">Python 3</span>
+                <span class="tech-item">psutil</span>
+                <span class="tech-item">NumPy</span>
+                <span class="tech-item">JSON</span>
+                <span class="tech-item">HTML/CSS</span>
+                <span class="tech-item">Cross-Platform</span>
+                <span class="tech-item">subprocess</span>
+                <span class="tech-item">threading</span>
+                <span class="tech-item">hashlib</span>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>🎯 ابدأ الآن</h2>
+            <p style="margin-bottom: 20px; color: #666;">استنسخ المستودع وشغل البرنامج لمقارنة أداء نظامك</p>
+            <a href="https://github.com/aaedmoslim70-jpg/os-comparison-benchmarks" class="button">📚 اعرض المستودع</a>
+            <a href="https://github.com/aaedmoslim70-jpg/os-comparison-benchmarks/blob/main/README.md" class="button">📖 اقرأ التوثيق</a>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>🌟 OS Comparison Benchmarks | جميع الحقوق محفوظة © 2026</p>
+            <p>صنع بـ ❤️ لمقارنة أداء أنظمة التشغيل</p>
+        </footer>
     </div>
 </body>
 </html>
