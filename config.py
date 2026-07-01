@@ -14,11 +14,11 @@ SYSTEM_INFO = {
 
 # إعدادات Benchmarks
 BENCHMARK_CONFIG = {
-    'cpu_iterations': 1000000,
-    'memory_test_size': 100 * 1024 * 1024,  # 100 MB
-    'process_count': 10,
-    'duration_seconds': 30,
-    'file_size_mb': 50
+    'cpu_iterations': 100000,
+    'memory_test_size': 50 * 1024 * 1024,  # 50 MB
+    'process_count': 5,
+    'duration_seconds': 10,
+    'file_size_mb': 20
 }
 
 # المجلدات
@@ -26,3 +26,4 @@ RESULTS_DIR = 'results'
 BENCHMARKS_DIR = 'benchmarks'
 
 os.makedirs(RESULTS_DIR, exist_ok=True)
+os.makedirs('logs', exist_ok=True)
