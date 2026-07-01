@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقارنة أنظمة التشغيل - Dynamic Benchmarks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            direction: rtl;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #764ba2;
+            padding-bottom: 10px;
+        }
+
+        .card h3 {
+            color: #764ba2;
+            margin: 15px 0 10px 0;
+        }
+
+        .system-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-right: 4px solid #667eea;
+        }
+
+        .info-item .label {
+            display: block;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .info-item .value {
+            display: block;
+            color: #333;
+            font-size: 1em;
+            word-break: break-word;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-info {
+            text-align: center;
+        }
+
+        .progress-info p {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-card .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .metric-card .value {
+            font-size: 1.6em;
+            font-weight: bold;
+        }
+
+        .metric-card .unit {
+            font-size: 0.8em;
+            opacity: 0.8;
+            display: block;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+        }
+
+        .status.running {
+            background: #cce5ff;
+            color: #004999;
+        }
+
+        .status.success {
+            background: #ccf0dd;
+            color: #00594a;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .history-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-right: 4px solid #667eea;
+        }
+
+        .history-item .date {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .history-item .score {
+            color: #764ba2;
+            font-size: 1.2em;
+        }
+
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: #666;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .system-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🖥️ مقارنة أنظمة التشغيل</h1>
+            <p>أداة ديناميكية لقياس أداء النظام بشكل فوري</p>
+        </header>
+
+        <!-- System Info -->
+        <div class="card">
+            <h2>معلومات النظام 📊</h2>
+            <div class="system-info-grid">
+                <div class="info-item">
+                    <span class="label">نظام التشغيل:</span>
+                    <span class="value" id="os">جاري التحميل...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">البنية:</span>
+                    <span class="value" id="arch">جاري التحميل...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">عدد المعالجات:</span>
+                    <span class="value" id="cpus">جاري التحميل...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">الذاكرة الكلية:</span>
+                    <span class="value" id="totalMemory">جاري التحميل...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">الذاكرة المتاحة:</span>
+                    <span class="value" id="freeMemory">جاري التحميل...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">الوقت:</span>
+                    <span class="value" id="timestamp">جاري التحميل...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="card">
+            <h2>لوحة التحكم ⚙️</h2>
+            <div class="controls">
+                <button class="btn btn-primary" id="startBtn" onclick="startBenchmarks()">
+                    <span>▶️</span> بدء الاختبارات
+                </button>
+                <button class="btn btn-secondary" id="exportBtn" onclick="exportResults()" disabled>
+                    <span>📥</span> تحميل النتائج
+                </button>
+                <button class="btn btn-secondary" id="historyBtn" onclick="toggleHistory()">
+                    <span>📋</span> السجل
+                </button>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="card" id="statusCard" style="display:none;">
+            <h2>حالة الاختبارات 🔄</h2>
+            <div id="statusText" class="status"></div>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill">0%</div>
+            </div>
+            <p id="progressPercent" style="text-align:center; color:#667eea; font-weight:bold;">0%</p>
+        </div>
+
+        <!-- Results -->
+        <div class="card" id="resultsCard" style="display:none;">
+            <h2>النتائج 📈</h2>
+            
+            <h3>🧠 اختبارات المعالج والذاكرة</h3>
+            <div id="cpuResults" class="metrics-grid"></div>
+            
+            <h3>💾 اختبارات الذاكرة</h3>
+            <div id="memoryResults" class="metrics-grid"></div>
+            
+            <h3>📁 نظام الملفات</h3>
+            <div id="fileResults" class="metrics-grid"></div>
+            
+            <h3>🌐 الشبكة</h3>
+            <div id="networkResults" class="metrics-grid"></div>
+            
+            <h3>🔒 الأمان</h3>
+            <div id="securityResults" class="metrics-grid"></div>
+        </div>
+
+        <!-- History -->
+        <div class="card" id="historyCard" style="display:none;">
+            <h2>سجل الاختبارات 📋</h2>
+            <div id="historyList"></div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>🌟 OS Comparison Benchmarks | Dynamic Performance Analysis</p>
+            <p>صنع بـ ❤️ لقياس أداء أنظمة التشغيل</p>
+        </footer>
+    </div>
+
+    <script>
+        const WS_URL = `ws://${window.location.host}`;
+        let ws = null;
+        let currentResults = null;
+
+        // Initialize WebSocket connection
+        function initWebSocket() {
+            ws = new WebSocket(WS_URL);
+            ws.onopen = () => console.log('WebSocket connected');
+            ws.onmessage = (event) => {
+                const state = JSON.parse(event.data);
+                updateStatus(state);
+            };
+            ws.onerror = (error) => console.error('WebSocket error:', error);
+            ws.onclose = () => {
+                setTimeout(initWebSocket, 3000); // Reconnect after 3s
+            };
+        }
+
+        // Load system info on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSystemInfo();
+            loadHistory();
+            initWebSocket();
+        });
+
+        function loadSystemInfo() {
+            fetch('/api/system-info')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('os').textContent = data.os;
+                    document.getElementById('arch').textContent = data.arch;
+                    document.getElementById('cpus').textContent = data.cpus;
+                    document.getElementById('totalMemory').textContent = data.totalMemory;
+                    document.getElementById('freeMemory').textContent = data.freeMemory;
+                    document.getElementById('timestamp').textContent = new Date(data.timestamp).toLocaleString('ar-SA');
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function startBenchmarks() {
+            const startBtn = document.getElementById('startBtn');
+            startBtn.disabled = true;
+            startBtn.innerHTML = '<span class="loading">⏳</span> جاري التشغيل...';
+
+            fetch('/api/benchmarks/start', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('statusCard').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('خطأ: ' + error);
+                    startBtn.disabled = false;
+                    startBtn.innerHTML = '<span>▶️</span> بدء الاختبارات';
+                });
+        }
+
+        function updateStatus(state) {
+            const statusCard = document.getElementById('statusCard');
+            const statusText = document.getElementById('statusText');
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const startBtn = document.getElementById('startBtn');
+            const exportBtn = document.getElementById('exportBtn');
+
+            statusCard.style.display = 'block';
+            progressFill.style.width = state.progress + '%';
+            progressFill.textContent = state.progress + '%';
+            progressPercent.textContent = state.progress + '%';
+
+            if (state.running) {
+                statusText.innerHTML = `<strong>🔄 ${state.currentTest}</strong>`;
+                statusText.className = 'status running';
+                startBtn.disabled = true;
+            } else if (state.error) {
+                statusText.innerHTML = `<strong>❌ خطأ:</strong> ${state.error}`;
+                statusText.className = 'status error';
+                startBtn.disabled = false;
+                startBtn.innerHTML = '<span>▶️</span> بدء الاختبارات';
+            } else if (state.progress === 100 && state.results) {
+                statusText.innerHTML = '<strong>✅ اكتملت الاختبارات بنجاح</strong>';
+                statusText.className = 'status success';
+                currentResults = state.results;
+                displayResults(state.results);
+                exportBtn.disabled = false;
+                startBtn.disabled = false;
+                startBtn.innerHTML = '<span>▶️</span> بدء الاختبارات';
+            }
+        }
+
+        function displayResults(data) {
+            document.getElementById('resultsCard').style.display = 'block';
+            
+            // CPU Results
+            const cpuResults = document.getElementById('cpuResults');
+            cpuResults.innerHTML = `
+                <div class="metric-card">
+                    <div class="label">أداء CPU</div>
+                    <div class="value">${(data.benchmarks.cpu.cpu_performance || 0).toFixed(0)}</div>
+                    <div class="unit">العمليات/الثانية</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">وقت CPU</div>
+                    <div class="value">${(data.benchmarks.cpu.cpu_time || 0).toFixed(3)}</div>
+                    <div class="unit">ثانية</div>
+                </div>
+            `;
+
+            // Memory Results
+            const memoryResults = document.getElementById('memoryResults');
+            let memoryHTML = '';
+            if (data.benchmarks.memory) {
+                Object.entries(data.benchmarks.memory).forEach(([key, value]) => {
+                    memoryHTML += `
+                        <div class="metric-card">
+                            <div class="label">${key}</div>
+                            <div class="value">${(value * 1000).toFixed(2)}</div>
+                            <div class="unit">ms</div>
+                        </div>
+                    `;
+                });
+            }
+            memoryResults.innerHTML = memoryHTML;
+
+            // File Results
+            const fileResults = document.getElementById('fileResults');
+            fileResults.innerHTML = `
+                <div class="metric-card">
+                    <div class="label">وقت إنشاء الملفات</div>
+                    <div class="value">${(data.benchmarks.files.file_creation_time || 0).toFixed(3)}</div>
+                    <div class="unit">ثانية</div>
+                </div>
+            `;
+
+            // Network Results
+            const networkResults = document.getElementById('networkResults');
+            networkResults.innerHTML = `
+                <div class="metric-card">
+                    <div class="label">كمون الشبكة</div>
+                    <div class="value">${(data.benchmarks.network.network_latency || 0).toFixed(2)}</div>
+                    <div class="unit">ms</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">الإنتاجية</div>
+                    <div class="value">${(data.benchmarks.network.network_throughput || 0).toFixed(0)}</div>
+                    <div class="unit">Mbps</div>
+                </div>
+            `;
+
+            // Security Results
+            const securityResults = document.getElementById('securityResults');
+            let securityHTML = '';
+            if (data.benchmarks.security) {
+                Object.entries(data.benchmarks.security).forEach(([key, value]) => {
+                    securityHTML += `
+                        <div class="metric-card">
+                            <div class="label">${key}</div>
+                            <div class="value">${value}</div>
+                            <div class="unit">MB/s</div>
+                        </div>
+                    `;
+                });
+            }
+            securityResults.innerHTML = securityHTML;
+        }
+
+        function exportResults() {
+            if (!currentResults) {
+                alert('لا توجد نتائج للتحميل');
+                return;
+            }
+            
+            fetch('/api/benchmarks/export', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = `/api/benchmarks/download/${data.filename}`;
+                    loadHistory();
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function loadHistory() {
+            fetch('/api/benchmarks/history')
+                .then(response => response.json())
+                .then(data => {
+                    const historyList = document.getElementById('historyList');
+                    if (data.length === 0) {
+                        historyList.innerHTML = '<p>لا توجد نتائج سابقة</p>';
+                        return;
+                    }
+                    
+                    historyList.innerHTML = data.map(item => `
+                        <div class="history-item">
+                            <div class="date">${item.timestamp}</div>
+                            <div class="score">نظام التشغيل: ${item.results.systemInfo.os}</div>
+                        </div>
+                    `).join('');
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function toggleHistory() {
+            const historyCard = document.getElementById('historyCard');
+            historyCard.style.display = historyCard.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>
